@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="login-background">
+      <div className="login-container">
 
-export default App
+        <h1 className="login-title">로그인</h1>
+
+        <div className="input-box">
+          <label>이메일</label>
+          <input
+            type="email"
+            placeholder="이메일 입력"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="input-box">
+          <label>비밀번호</label>
+          <input
+            type="password"
+            placeholder="비밀번호 입력"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button
+          className="login-btn"
+          onClick={() => console.log("로그인:", email, password)}
+        >
+          로그인
+        </button>
+
+        <button
+          className="signup-btn"
+          onClick={() => console.log("회원가입 이동")}
+        >
+          회원가입
+        </button>
+
+      </div>
+    </div>
+  );
+}
