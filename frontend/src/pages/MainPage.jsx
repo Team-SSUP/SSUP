@@ -17,7 +17,19 @@ export default function MainPage() {
         {/* 메인 컨텐츠 */}
         <main className="flex-1 px-14 py-10">
 
-          <Section
+
+        <div className="mt-10 text-center">
+          <p className="text-red-600 text-lg leading-relaxed">
+            "시흥시 대학생들의 연결을 돕는 모임 플랫폼, 시흥시 놀이터.
+다양한 관심사 모임을 만들고 함께 활동해보세요."
+          </p>
+        </div>
+
+
+          <div className="mt-10">
+            <Section
+          
+            
             title="🔥 활동이 활발한 모임"
             layout="grid"
             groups={[
@@ -36,6 +48,7 @@ export default function MainPage() {
               { title: "PT 그룹 모임", imageUrl: "https://picsum.photos/600?6" },
             ]}
           />
+          </div>
 
             
         </main>
