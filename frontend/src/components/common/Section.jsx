@@ -1,3 +1,4 @@
+//Section.jsx
 import GroupCard from "../group/GroupCard";
 
 export default function Section({ title, groups }) {
@@ -7,7 +8,7 @@ export default function Section({ title, groups }) {
         {title}
       </h2>
 
-      <div className="flex gap-4 flex-wrap">
+      <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-3">
         {groups.map((group, index) => (
           <GroupCard
             key={index}

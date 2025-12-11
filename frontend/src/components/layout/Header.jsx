@@ -1,14 +1,19 @@
+//Header.jsx
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="w-full h-20 bg-white shadow-sm flex items-center justify-between px-12">
+    <header className="w-full h-20 bg-white flex items-center justify-between px-12 border-b border-gray-200">
 
-      <div className="text-2xl font-bold text-blue-600">
+
+
+      <div className="text-2xl font-bold text-red-600">
         시흥시 놀이터
       </div>
+      
+
 
       <input 
         type="text" 

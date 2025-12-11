@@ -1,27 +1,11 @@
-/* src/index.css 파일 최종 수정 내용 */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* ---------------------------------------------------- */
-/* 레이아웃 강제 수정 (브라우저 기본 스타일 리셋) */
-/* ---------------------------------------------------- */
+/* HTML 기본 리셋 */
 html, body, #root {
-  height: 100%;
-  margin: 0 !important; /* 브라우저의 기본 마진을 강제로 제거 */
+  margin: 0;
   padding: 0;
+  height: 100%;
 }
 
-body {
-    /* 브라우저 기본값인 display: block을 무력화 */
-    margin: 0 !important;
-}
-
-#root {
-    min-height: 100vh;
-    display: flex; 
-    flex-direction: column; 
-    /* #root의 display: block 기본값을 flex로 덮어씌움 */
-}
-
-/* (이하 기존의 :root, a 스타일 유지) */
+/* #root는 flex 주지 마세요. Tailwind 레이아웃 깨집니다. */
+/* 필요하다면 MainPage.jsx에서 flex 레이아웃을 구성해야 합니다. */

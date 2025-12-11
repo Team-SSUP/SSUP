@@ -1,7 +1,7 @@
 // Sidebar.jsx
 export default function Sidebar() {
   return (
-    <aside className="w-56 h-full border-r bg-white px-5 py-6 flex flex-col gap-6 flex-shrink-0">
+    <aside className="w-[180px] h-full border-r bg-white px-5 py-6 flex flex-col gap-6 flex-shrink-0">
 
       {/* 상단 메뉴 제목 */}
       <div className="text-lg font-bold text-gray-800">
@@ -19,11 +19,11 @@ export default function Sidebar() {
         </button>
       </nav>
 
-      <hr className="border-gray-300" />
+      <hr className="border-gray-300" ml-600 />
 
       {/* 카테고리 */}
       <div>
-        <div className="text-sm font-semibold text-gray-600 mb-2">카테고리</div>
+        <div className="text-sm font-semibold text-gray-600 ml-10">카테고리</div>
 
         <div className="flex flex-col gap-2">
           <button className="text-left px-3 py-2 rounded-md hover:bg-gray-100 transition">
