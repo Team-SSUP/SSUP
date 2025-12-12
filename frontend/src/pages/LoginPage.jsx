@@ -1,8 +1,26 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/login", {
+        email,
+        password,
+      });
+
+      console.log("로그인 성공:", response.data);
+      alert("로그인 성공");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      alert("로그인 실패");
+    }
+  };
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-gradient-to-br from-gray-100 to-white">
@@ -14,9 +32,7 @@ export default function LoginPage() {
 
         {/* 이메일 */}
         <div className="flex flex-col mb-6">
-          <label className="text-sm font-semibold mb-1 text-gray-600">
-            이메일
-          </label>
+          <label className="text-sm font-semibold mb-1 text-gray-600">이메일</label>
           <input
             type="email"
             placeholder="이메일 입력"
@@ -28,9 +44,7 @@ export default function LoginPage() {
 
         {/* 비밀번호 */}
         <div className="flex flex-col mb-6">
-          <label className="text-sm font-semibold mb-1 text-gray-600">
-            비밀번호
-          </label>
+          <label className="text-sm font-semibold mb-1 text-gray-600">비밀번호</label>
           <input
             type="password"
             placeholder="비밀번호 입력"
@@ -42,7 +56,7 @@ export default function LoginPage() {
 
         {/* 로그인 버튼 */}
         <button
-          onClick={() => console.log("로그인:", email, password)}
+          onClick={handleLogin}
           className="w-full py-3 bg-blue-500 text-white rounded-lg text-[17px] font-semibold mt-2 transition hover:bg-blue-600"
         >
           로그인
@@ -50,10 +64,10 @@ export default function LoginPage() {
 
         {/* 회원가입 버튼 */}
         <button
-          onClick={() => console.log("회원가입 이동")}
-          className="w-full py-3 bg-white border border-gray-300 text-gray-600 rounded-lg text-[16px] font-medium mt-3 transition hover:bg-gray-100"
-        >
-          회원가입
+          onClick={()=> navigate("/signup")}
+          className="w-full py-3 bg-blue-500 text-white rounded-lg text-[17px] font-semibold mt-2 transition hover:bg-blue-600"
+        >  
+          회원가입  
         </button>
 
       </div>
