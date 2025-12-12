@@ -13,31 +13,31 @@ import sdn.backend.util.JwtUtil;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder; // SecurityConfig에서 등록한 암호화 도구
+    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // 1. 회원가입 기능 (New!)
+    // 회원가입
     public void signup(LoginDto signupDto) {
-        // (1) 중복 아이디 체크
+        // 중복 아이디 체크
         if (userRepository.findByUsername(signupDto.getUsername()).isPresent()) {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
 
-        // (2) 비밀번호 암호화 (보안 필수!)
+        // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(signupDto.getPassword());
 
-        // (3) DB에 저장
+        // DB 저장
         User user = new User(signupDto.getUsername(), encodedPassword);
         userRepository.save(user);
     }
 
-    // 2. 로그인 기능
+    // 로그인
     public String login(LoginDto loginDto) {
         // 아이디 찾기
         User user = userRepository.findByUsername(loginDto.getUsername())
                 .orElseThrow(() -> new RuntimeException("없는 아이디입니다."));
 
-        // 암호화된 비밀번호 비교 (matches 사용)
+        // 비밀번호 비교
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
             throw new RuntimeException("비밀번호가 틀렸습니다.");
         }
