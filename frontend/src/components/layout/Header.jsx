@@ -7,14 +7,10 @@ export default function Header() {
   return (
     <header className="w-full h-20 bg-white flex items-center justify-between px-12 border-b border-gray-200">
 
-
-
       <div className="text-2xl font-bold text-red-600">
         시흥시 놀이터
       </div>
       
-
-
       <input 
         type="text" 
         className="w-[400px] px-5 py-2.5 rounded-full border focus:ring-2 focus:ring-blue-400"
