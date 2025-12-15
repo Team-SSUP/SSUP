@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios"; // axios instance
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
@@ -9,16 +9,28 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/login", {
+      const response = await api.post("/api/login", {
         email,
         password,
       });
 
+      // 토큰 저장
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+
+      // 유저 정보
+      localStorage.setItem("email", response.data.email);
+      localStorage.setItem("name", response.data.name);
+
       console.log("로그인 성공:", response.data);
       alert("로그인 성공");
+
+      // 메인 페이지 이동
+      navigate("/");
+
     } catch (error) {
       console.error("로그인 실패:", error);
-      alert("로그인 실패");
+      alert("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
   };
 
@@ -32,7 +44,9 @@ export default function LoginPage() {
 
         {/* 이메일 */}
         <div className="flex flex-col mb-6">
-          <label className="text-sm font-semibold mb-1 text-gray-600">이메일</label>
+          <label className="text-sm font-semibold mb-1 text-gray-600">
+            이메일
+          </label>
           <input
             type="email"
             placeholder="이메일 입력"
@@ -44,7 +58,9 @@ export default function LoginPage() {
 
         {/* 비밀번호 */}
         <div className="flex flex-col mb-6">
-          <label className="text-sm font-semibold mb-1 text-gray-600">비밀번호</label>
+          <label className="text-sm font-semibold mb-1 text-gray-600">
+            비밀번호
+          </label>
           <input
             type="password"
             placeholder="비밀번호 입력"
@@ -64,10 +80,10 @@ export default function LoginPage() {
 
         {/* 회원가입 버튼 */}
         <button
-          onClick={()=> navigate("/signup")}
+          onClick={() => navigate("/signup")}
           className="w-full py-3 bg-blue-500 text-white rounded-lg text-[17px] font-semibold mt-2 transition hover:bg-blue-600"
-        >  
-          회원가입  
+        >
+          회원가입
         </button>
 
       </div>
