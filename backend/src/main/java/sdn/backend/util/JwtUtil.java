@@ -11,8 +11,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // 비밀키 (임시용: 실무에선 application.properties에 숨겨야 함)
-    // 32글자 이상 아무거나 길게 적으세요!
+    // 비밀키 (임시용)
     private static final String SECRET_KEY = "sdn_project_secret_key_play_ground_student_community";
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
@@ -26,5 +25,21 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // 만료 시간
                 .signWith(key, SignatureAlgorithm.HS256) // 서명
                 .compact();
+    }
+
+    public String getUsername(String token) {
+    return Jwts.parserBuilder().setSigningKey(key).build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -6,6 +6,6 @@ import sdn.backend.entity.User;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    // "아이디로 회원 찾기" 기능 (로그인할 때 필수)
+    // 아이디로 회원 찾기
     Optional<User> findByUsername(String username);
 }
