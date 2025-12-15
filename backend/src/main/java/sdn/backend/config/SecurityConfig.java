@@ -9,9 +9,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import sdn.backend.service.UserService;
+import sdn.backend.util.JwtUtil;
 
 import java.util.List;
 
@@ -19,10 +23,14 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // 비밀번호 암호화 도구 등록 (BCrypt)
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    // 필요한 객체 주입을 위해 필드 추가
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
+
+    // 생성자 주입 (Lombok @RequiredArgsConstructor가 있다면 생략 가능하지만 명시적으로 작성함)
+    public SecurityConfig(UserService userService, JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     // 보안 필터 체인 설정
@@ -47,7 +55,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/meetings/**").permitAll() 
                 // 그 외 모든 요청은 인증 필요
                 .anyRequest().authenticated()
-            );
+            )
+            // ★ 여기에 필터 추가: UsernamePasswordAuthenticationFilter 앞에 JwtFilter를 실행해라
+            .addFilterBefore(new JwtFilter(userService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
