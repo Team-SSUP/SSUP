@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios"; // axios instance 사용
 import { useNavigate } from "react-router-dom";
 
 export default function SignUpPage() {
@@ -10,6 +10,12 @@ export default function SignUpPage() {
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
+    // 유효성 검사
+    if (!name || !email || !password) {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+
     if (password !== passwordCheck) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
@@ -17,22 +23,18 @@ export default function SignUpPage() {
 
     try {
       // 회원가입 요청
-      const response = await axios.post(
-        "http://localhost:8080/api/signup",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      const response = await api.post("/api/signup", {
+        name,
+        email,
+        password,
+      });
 
       console.log("회원가입 성공:", response.data);
       alert("회원가입 성공! 로그인 해주세요.");
-      navigate("/login");
 
     } catch (error) {
       console.error("회원가입 실패:", error);
-      alert("회원가입 실패");
+      alert("이미 존재하는 이메일이거나 서버 오류입니다.");
     }
   };
 
@@ -54,7 +56,7 @@ export default function SignUpPage() {
             placeholder="이름 입력"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="p-3 border border-gray-300 rounded-lg bg-gray-100 focus:bg-white"
+            className="p-3 text-[15px] border border-gray-300 rounded-lg bg-gray-100 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition"
           />
         </div>
 
@@ -68,7 +70,7 @@ export default function SignUpPage() {
             placeholder="이메일 입력"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="p-3 border border-gray-300 rounded-lg bg-gray-100 focus:bg-white"
+            className="p-3 text-[15px] border border-gray-300 rounded-lg bg-gray-100 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition"
           />
         </div>
 
@@ -82,7 +84,7 @@ export default function SignUpPage() {
             placeholder="비밀번호 입력"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="p-3 border border-gray-300 rounded-lg bg-gray-100 focus:bg-white"
+            className="p-3 text-[15px] border border-gray-300 rounded-lg bg-gray-100 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition"
           />
         </div>
 
@@ -96,14 +98,14 @@ export default function SignUpPage() {
             placeholder="비밀번호 확인"
             value={passwordCheck}
             onChange={(e) => setPasswordCheck(e.target.value)}
-            className="p-3 border border-gray-300 rounded-lg bg-gray-100 focus:bg-white"
+            className="p-3 text-[15px] border border-gray-300 rounded-lg bg-gray-100 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition"
           />
         </div>
 
         {/* 회원가입 버튼 */}
         <button
           onClick={handleSignUp}
-          className="w-full py-3 bg-blue-500 text-white rounded-lg text-[17px] font-semibold hover:bg-blue-600"
+          className="w-full py-3 bg-blue-500 text-white rounded-lg text-[17px] font-semibold mt-2 transition hover:bg-blue-600"
         >
           회원가입
         </button>
@@ -111,7 +113,7 @@ export default function SignUpPage() {
         {/* 로그인 이동 */}
         <button
           onClick={() => navigate("/login")}
-          className="w-full py-3 bg-white border border-gray-300 text-gray-600 rounded-lg mt-3 hover:bg-gray-100"
+          className="w-full py-3 bg-white border border-gray-300 text-gray-600 rounded-lg text-[16px] font-medium mt-3 transition hover:bg-gray-100"
         >
           로그인하러 가기
         </button>
