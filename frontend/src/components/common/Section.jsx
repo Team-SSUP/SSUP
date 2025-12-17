@@ -8,12 +8,11 @@ export default function Section({ title, groups }) {
         {title}
       </h2>
 
-      <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4"> 
-        {groups.map((group, index) => (
+      <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-6"> 
+        {groups.map((group) => (
           <GroupCard
-            key={index}
-            title={group.title}
-            imageUrl={group.imageUrl}
+            key={group.id}
+            group={group}
           />
         ))}
       </div>
