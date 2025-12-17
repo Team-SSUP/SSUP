@@ -1,8 +1,13 @@
 // GroupCard.jsx
 import { MapPin,Clock, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 export default function GroupCard({ group }) {
+  const navigate = useNavigate();
   return (
-    <div className="w-full bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition cursor-pointer bg-white">
+    <div
+      onClick={() => navigate(`/meetings/${group.id}`)} 
+      className="w-full bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition cursor-pointer bg-white">
+      
       
       {/* 이미지 */}
       <div className="relative">
