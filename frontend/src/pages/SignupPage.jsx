@@ -24,9 +24,8 @@ export default function SignUpPage() {
     try {
       // 회원가입 요청
       const response = await api.post("/api/signup", {
-        name,
-        email,
-        password,
+        username: email,
+        password: password
       });
 
       console.log("회원가입 성공:", response.data);
