@@ -19,7 +19,7 @@ export default function Sidebar() {
         </button>
       </nav>
 
-      <hr className="border-gray-300" ml-600 />
+      <hr className="border-gray-300" />
 
       {/* 카테고리 */}
       <div>
