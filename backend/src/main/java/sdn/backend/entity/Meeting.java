@@ -24,6 +24,9 @@ public class Meeting {
     private String category;    // 카테고리 (운동, 스터디 등)
 
     @Column(nullable = false)
+    private String content;     //모임소개
+
+    @Column(nullable = false)
     private String location;    // 장소 (정왕동 체육관)
 
     @Column(nullable = false)
@@ -41,9 +44,10 @@ public class Meeting {
     private LocalDateTime createdAt; // 생성일 (최신순 정렬용)
 
     // 생성자
-    public Meeting(String title, String category, String location, String meetingDate, Integer maxMembers, String imageUrl) {
+    public Meeting(String title, String category, String content, String location, String meetingDate, Integer maxMembers, String imageUrl) {
         this.title = title;
         this.category = category;
+        this.content=content;
         this.location = location;
         this.meetingDate = meetingDate;
         this.currentMembers = 1; // 생성 시 1명(본인)부터 시작
