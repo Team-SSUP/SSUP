@@ -25,4 +25,11 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     // 복합 필터링 (카테고리 + 정기/번개 선택 시)
     List<Meeting> findByCategoryAndMeetingDateIsNull(String category);
     List<Meeting> findByCategoryAndMeetingDateIsNotNull(String category);
+
+    // 유저가 생성한 모임 찾기
+    List<Meeting> findByCreatorUsername(String username);
+
+    // 유저가 참여 중인 모임 찾기
+    List<Meeting> findByParticipants_Username(String username);
+
 }
