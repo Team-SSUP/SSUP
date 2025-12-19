@@ -29,7 +29,7 @@ public class Meeting {
     @Column(nullable = false)
     private String location;    // 장소 (정왕동 체육관)
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String meetingDate; // 모임 시간 (문자열로 간편하게 처리: "오늘 19:00")
 
     @Column(nullable = false)
