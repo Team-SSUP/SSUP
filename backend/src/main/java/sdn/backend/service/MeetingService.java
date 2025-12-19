@@ -23,26 +23,26 @@ public class MeetingService {
 
     // 유저 생성 모임 조회
     @Transactional(readOnly = true)
-    public List<MeetingResponseDto> getCreatedMeetings(String username) {
-        return meetingRepository.findByCreatorUsername(username).stream()
+    public List<MeetingResponseDto> getCreatedMeetings(String email) {
+        return meetingRepository.findByCreatorEmail(email).stream()
                 .map(MeetingResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     // 유저 참여 모임 조회
     @Transactional(readOnly = true)
-    public List<MeetingResponseDto> getJoinedMeetings(String username) {
-        return meetingRepository.findByParticipants_Username(username).stream()
+    public List<MeetingResponseDto> getJoinedMeetings(String email) {
+        return meetingRepository.findByParticipants_Email(email).stream()
                 .map(MeetingResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     // 모임 참가 기능
     @Transactional
-    public void joinMeeting(Long meetingId, String username) {
+    public void joinMeeting(Long meetingId, String email) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new RuntimeException("모임을 찾을 수 없습니다."));
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
 
         if (meeting.getParticipants().contains(user)) {
@@ -73,8 +73,8 @@ public class MeetingService {
     
     // 모임 생성
     @Transactional
-    public void createMeeting(MeetingCreateDto dto, String username) {
-        User creator = userRepository.findByUsername(username)
+    public void createMeeting(MeetingCreateDto dto, String email) {
+        User creator = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("개설자 정보를 찾을 수 없습니다."));
         Meeting meeting = new Meeting(
             dto.getTitle(),
@@ -84,19 +84,19 @@ public class MeetingService {
             dto.getMeetingDate(),
             dto.getMaxMembers(),
             dto.getImageUrl()
-        );        
+        );
         meeting.setCreator(creator);
         meetingRepository.save(meeting);
     }
 
     // 모임 수정
     @Transactional
-    public void updateMeeting(Long meetingId, MeetingCreateDto dto, String username) {
+    public void updateMeeting(Long meetingId, MeetingCreateDto dto, String email) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new RuntimeException("모임을 찾을 수 없습니다."));
 
         // 권한 확인: 로그인한 유저가 개설자인지 확인
-        if (!meeting.getCreator().getUsername().equals(username)) {
+        if (!meeting.getCreator().getEmail().equals(email)) {
             throw new RuntimeException("수정 권한이 없습니다.");
         }
 
@@ -104,6 +104,7 @@ public class MeetingService {
         meeting.update(
             dto.getTitle(),
             dto.getCategory(),
+            dto.getContent(),
             dto.getLocation(),
             dto.getMeetingDate(),
             dto.getMaxMembers(),
@@ -113,12 +114,12 @@ public class MeetingService {
 
     // 모임 삭제
     @Transactional
-    public void deleteMeeting(Long meetingId, String username) {
+    public void deleteMeeting(Long meetingId, String email) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new RuntimeException("모임을 찾을 수 없습니다."));
 
         // 권한 확인
-        if (!meeting.getCreator().getUsername().equals(username)) {
+        if (!meeting.getCreator().getEmail().equals(email)) {
             throw new RuntimeException("삭제 권한이 없습니다.");
         }
 
