@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sdn.backend.dto.MeetingCreateDto;
@@ -20,6 +21,15 @@ import java.util.List;
 public class MeetingController {
 
     private final MeetingService meetingService;
+
+    // 통합 검색 및 필터링 API
+    @GetMapping
+    public List<MeetingResponseDto> getMeetings(
+            @RequestParam(required = false) String category, // "운동", "스터디" 등
+            @RequestParam(required = false) String type      // "regular" 또는 "instant"
+    ) {
+        return meetingService.getFilteredMeetings(category, type);
+    }
 
     @GetMapping("/hot")
     public List<MeetingResponseDto> getHotMeetings() {
