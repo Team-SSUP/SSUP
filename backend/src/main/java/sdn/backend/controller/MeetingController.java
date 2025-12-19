@@ -2,6 +2,7 @@ package sdn.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,11 @@ public class MeetingController {
         return meetingService.getNewMeetings();
     }
 
+    //모임id
+    @GetMapping("/{id}")
+    public MeetingResponseDto getMeetingDetail(@PathVariable Long id) {
+        return meetingService.getMeetingDetail(id);
+    }
     @PostMapping
     public String createMeeting(@RequestBody MeetingCreateDto dto) {
         // 실제로는 로그인한 유저 정보도 받아야 하지만, 1차 구현에서는 생략하거나 JWT에서 추출
