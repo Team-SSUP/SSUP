@@ -21,7 +21,7 @@ public class MeetingService {
     private final MeetingRepository meetingRepository;
     private final UserRepository userRepository;
 
-    // 1. 유저 생성 모임 조회
+    // 유저 생성 모임 조회
     @Transactional(readOnly = true)
     public List<MeetingResponseDto> getCreatedMeetings(String username) {
         return meetingRepository.findByCreatorUsername(username).stream()
@@ -29,7 +29,7 @@ public class MeetingService {
                 .collect(Collectors.toList());
     }
 
-    // 2. 유저 참여 모임 조회
+    // 유저 참여 모임 조회
     @Transactional(readOnly = true)
     public List<MeetingResponseDto> getJoinedMeetings(String username) {
         return meetingRepository.findByParticipants_Username(username).stream()
@@ -37,7 +37,7 @@ public class MeetingService {
                 .collect(Collectors.toList());
     }
 
-    // 3. 모임 참가 기능
+    // 모임 참가 기능
     @Transactional
     public void joinMeeting(Long meetingId, String username) {
         Meeting meeting = meetingRepository.findById(meetingId)
@@ -70,7 +70,8 @@ public class MeetingService {
                 .map(MeetingResponseDto::new)
                 .collect(Collectors.toList());
     }
-
+    
+    // 모임 생성
     @Transactional
     public void createMeeting(MeetingCreateDto dto, String username) {
         User creator = userRepository.findByUsername(username)
@@ -86,6 +87,42 @@ public class MeetingService {
         );        
         meeting.setCreator(creator);
         meetingRepository.save(meeting);
+    }
+
+    // 모임 수정
+    @Transactional
+    public void updateMeeting(Long meetingId, MeetingCreateDto dto, String username) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new RuntimeException("모임을 찾을 수 없습니다."));
+
+        // 권한 확인: 로그인한 유저가 개설자인지 확인
+        if (!meeting.getCreator().getUsername().equals(username)) {
+            throw new RuntimeException("수정 권한이 없습니다.");
+        }
+
+        // 엔티티 업데이트
+        meeting.update(
+            dto.getTitle(),
+            dto.getCategory(),
+            dto.getLocation(),
+            dto.getMeetingDate(),
+            dto.getMaxMembers(),
+            dto.getImageUrl()
+        );
+    }
+
+    // 모임 삭제
+    @Transactional
+    public void deleteMeeting(Long meetingId, String username) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new RuntimeException("모임을 찾을 수 없습니다."));
+
+        // 권한 확인
+        if (!meeting.getCreator().getUsername().equals(username)) {
+            throw new RuntimeException("삭제 권한이 없습니다.");
+        }
+
+        meetingRepository.delete(meeting);
     }
 
     //모임 상세페이지

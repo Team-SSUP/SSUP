@@ -59,7 +59,7 @@ public class Meeting {
     )
     private Set<User> participants = new HashSet<>(); // 참여자 목록
 
-    // 모임 생성 시 개설자를 참여자로 자동 포함하는 로직
+    // 모임 생성 시 개설자를 참여자로 자동 포함
     public void setCreator(User creator) {
         this.creator = creator;
         this.addParticipant(creator);
@@ -68,6 +68,16 @@ public class Meeting {
     public void addParticipant(User user) {
         this.participants.add(user);
         this.currentMembers = this.participants.size();
+    }
+
+    // 모임 수정
+    public void update(String title, String category, String location, String meetingDate, Integer maxMembers, String imageUrl) {
+    this.title = title;
+    this.category = category;
+    this.location = location;
+    this.meetingDate = meetingDate;
+    this.maxMembers = maxMembers;
+    this.imageUrl = imageUrl;
     }
 
     // 생성자
