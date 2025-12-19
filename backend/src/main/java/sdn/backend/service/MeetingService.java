@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import sdn.backend.dto.MeetingCreateDto;
 import sdn.backend.dto.MeetingResponseDto;
 import sdn.backend.entity.Meeting;
+import sdn.backend.entity.User;
 import sdn.backend.repository.MeetingRepository;
+import sdn.backend.repository.UserRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +19,41 @@ import java.util.stream.Collectors;
 public class MeetingService {
 
     private final MeetingRepository meetingRepository;
+    private final UserRepository userRepository;
+
+    // 1. 유저 생성 모임 조회
+    @Transactional(readOnly = true)
+    public List<MeetingResponseDto> getCreatedMeetings(String username) {
+        return meetingRepository.findByCreatorUsername(username).stream()
+                .map(MeetingResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    // 2. 유저 참여 모임 조회
+    @Transactional(readOnly = true)
+    public List<MeetingResponseDto> getJoinedMeetings(String username) {
+        return meetingRepository.findByParticipants_Username(username).stream()
+                .map(MeetingResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    // 3. 모임 참가 기능
+    @Transactional
+    public void joinMeeting(Long meetingId, String username) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new RuntimeException("모임을 찾을 수 없습니다."));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+
+        if (meeting.getParticipants().contains(user)) {
+            throw new RuntimeException("이미 참여 중인 모임입니다.");
+        }
+        if (meeting.getCurrentMembers() >= meeting.getMaxMembers()) {
+            throw new RuntimeException("인원이 가득 찼습니다.");
+        }
+
+        meeting.addParticipant(user);
+    }
 
     // 핫한 모임 목록 가져오기
     @Transactional(readOnly = true)
@@ -35,7 +72,9 @@ public class MeetingService {
     }
 
     @Transactional
-    public void createMeeting(MeetingCreateDto dto) {
+    public void createMeeting(MeetingCreateDto dto, String username) {
+        User creator = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("개설자 정보를 찾을 수 없습니다."));
         Meeting meeting = new Meeting(
             dto.getTitle(),
             dto.getCategory(),
@@ -44,10 +83,8 @@ public class MeetingService {
             dto.getMeetingDate(),
             dto.getMaxMembers(),
             dto.getImageUrl()
-        );
-        // Entity에 content 필드가 없다면 추가하거나 생성자 수정 필요
-        // 현재는 예시로 content는 생략하거나 Entity 업데이트 필요
-        
+        );        
+        meeting.setCreator(creator);
         meetingRepository.save(meeting);
     }
 

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "meetings")
@@ -42,6 +44,31 @@ public class Meeting {
     private String imageUrl;    // 이미지 URL
 
     private LocalDateTime createdAt; // 생성일 (최신순 정렬용)
+
+
+    // --- 유저 관계 추가 ---
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id")
+    private User creator; // 모임 개설자
+
+    @ManyToMany
+    @JoinTable(
+        name = "meeting_participants",
+        joinColumns = @JoinColumn(name = "meeting_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> participants = new HashSet<>(); // 참여자 목록
+
+    // 모임 생성 시 개설자를 참여자로 자동 포함하는 로직
+    public void setCreator(User creator) {
+        this.creator = creator;
+        this.addParticipant(creator);
+    }
+
+    public void addParticipant(User user) {
+        this.participants.add(user);
+        this.currentMembers = this.participants.size();
+    }
 
     // 생성자
     public Meeting(String title, String category, String content, String location, String meetingDate, Integer maxMembers, String imageUrl) {

@@ -13,6 +13,7 @@ import sdn.backend.dto.MeetingCreateDto;
 import sdn.backend.dto.MeetingResponseDto;
 import sdn.backend.service.MeetingService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -47,9 +48,28 @@ public class MeetingController {
         return meetingService.getMeetingDetail(id);
     }
     @PostMapping
-    public String createMeeting(@RequestBody MeetingCreateDto dto) {
-        // 실제로는 로그인한 유저 정보도 받아야 하지만, 1차 구현에서는 생략하거나 JWT에서 추출
-        meetingService.createMeeting(dto);
+    public String createMeeting(@RequestBody MeetingCreateDto dto, Principal principal) {
+        String username = principal.getName();
+        meetingService.createMeeting(dto, username);
         return "모임 생성 성공";
+    }
+
+    // 내가 만든 모임
+    @GetMapping("/my/created")
+    public List<MeetingResponseDto> getMyCreatedMeetings(Principal principal) {
+        return meetingService.getCreatedMeetings(principal.getName());
+    }
+
+    // 내가 참여한 모임
+    @GetMapping("/my/joined")
+    public List<MeetingResponseDto> getMyJoinedMeetings(Principal principal) {
+        return meetingService.getJoinedMeetings(principal.getName());
+    }
+
+    // 모임 참가 신청
+    @PostMapping("/{id}/join")
+    public String joinMeeting(@PathVariable Long id, Principal principal) {
+        meetingService.joinMeeting(id, principal.getName());
+        return "참가 성공";
     }
 }
