@@ -45,7 +45,7 @@ export default function Header() {
             </button>
           </>
         ) : (
-          // ❌ 비로그인 상태
+          //비로그인 상태
           <>
             <Link
               to="/login"

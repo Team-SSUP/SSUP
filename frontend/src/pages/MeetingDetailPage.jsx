@@ -104,9 +104,31 @@ export default function MeetingDetailPage() {
               </p>
             </div>
           </div>
+          {/* 모임 참가 버튼 */}
+<div className="mt-8">
+  <button
+    disabled={group.currentMembers >= group.maxMembers}
+    onClick={() => {
+      alert("모임 참가 요청이 완료되었습니다!");
+      // 나중에 여기서 POST /api/meetings/{id}/join 같은 API 호출
+    }}
+    className={`w-full py-4 rounded-xl text-white font-semibold transition
+      ${
+        group.currentMembers >= group.maxMembers
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-blue-600 hover:bg-blue-700"
+      }
+    `}
+  >
+    {group.currentMembers >= group.maxMembers
+      ? "모집이 마감된 모임입니다"
+      : "모임 참가하기"}
+  </button>
+</div>
+
 
           {/* 멤버 목록 */}
-          <div className="bg-white rounded-2xl shadow p-8">
+          <div className="bg-white rounded-2xl shadow p-8 mt-8">
             <h2 className="text-lg font-semibold mb-6">
               참여 멤버 ({members.length})
             </h2>
