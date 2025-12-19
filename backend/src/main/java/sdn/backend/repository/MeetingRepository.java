@@ -3,14 +3,15 @@ package sdn.backend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import sdn.backend.entity.Meeting;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     
-    // 1. 최신순 조회 (ID 역순 = 최신순)
+    // 최신순 조회 (ID 역순 = 최신순)
     List<Meeting> findTop8ByOrderByIdDesc();
 
-    // 2. 핫한 모임 조회 (현재 인원이 많은 순서대로 4개)
+    // 핫한 모임 조회 (현재 인원이 많은 순서대로 8개)
     List<Meeting> findTop8ByOrderByCurrentMembersDesc();
 
     // 카테고리별 필터링
@@ -32,4 +33,6 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     // 유저가 참여 중인 모임 찾기
     List<Meeting> findByParticipants_Username(String username);
 
+    // 현재 시간보다 이전이면서 null이 아닌(번개모임) 모임 찾기
+    List<Meeting> findByMeetingDateBefore(LocalDateTime now);
 }

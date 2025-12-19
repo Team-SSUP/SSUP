@@ -1,5 +1,7 @@
 package sdn.backend.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import sdn.backend.entity.Meeting;
@@ -12,7 +14,7 @@ public class MeetingResponseDto {
     private String category;
     private String content;
     private String location;
-    private String date; // frontend props: date
+    private LocalDateTime date; 
     private Integer currentMembers;
     private Integer maxMembers;
     private String imageUrl;

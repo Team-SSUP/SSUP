@@ -84,7 +84,7 @@ public class MeetingService {
             dto.getMeetingDate(),
             dto.getMaxMembers(),
             dto.getImageUrl()
-        );        
+        );
         meeting.setCreator(creator);
         meetingRepository.save(meeting);
     }
@@ -104,6 +104,7 @@ public class MeetingService {
         meeting.update(
             dto.getTitle(),
             dto.getCategory(),
+            dto.getContent(),
             dto.getLocation(),
             dto.getMeetingDate(),
             dto.getMaxMembers(),
