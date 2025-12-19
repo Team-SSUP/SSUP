@@ -28,10 +28,10 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     List<Meeting> findByCategoryAndMeetingDateIsNotNull(String category);
 
     // 유저가 생성한 모임 찾기
-    List<Meeting> findByCreatorUsername(String username);
+    List<Meeting> findByCreatorEmail(String email);
 
     // 유저가 참여 중인 모임 찾기
-    List<Meeting> findByParticipants_Username(String username);
+    List<Meeting> findByParticipants_Email(String email);
 
     // 현재 시간보다 이전이면서 null이 아닌(번개모임) 모임 찾기
     List<Meeting> findByMeetingDateBefore(LocalDateTime now);
