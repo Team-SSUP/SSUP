@@ -7,16 +7,20 @@ export default function Sidebar({
   return (
     <aside className="w-[180px] h-full border-r bg-white px-5 py-6 flex flex-col gap-6">
 
-
       <div className="text-lg font-bold text-gray-800">
         메뉴
       </div>
+
       {/* 정규 / 번개 */}
       <nav className="flex flex-col gap-3">
         {["전체", "정규", "번개"].map(t => (
           <button
             key={t}
-            onClick={() => setType(t)}
+            onClick={() => {
+              setType(t);
+              // 🔥 핵심: 타입 바꿀 때 카테고리 초기화
+              setCategory("전체");
+            }}
             className={`text-left px-3 py-2 rounded-md transition
               ${
                 type === t
@@ -36,7 +40,10 @@ export default function Sidebar({
         {["전체", "운동", "스터디", "독서", "게임"].map(c => (
           <button
             key={c}
-            onClick={() => setCategory(c)}
+            onClick={() => {
+              setCategory(c);
+              // 🔥 카테고리 바꿀 때 타입은 그대로 둠
+            }}
             className={`text-left px-3 py-2 rounded-md transition
               ${
                 category === c

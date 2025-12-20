@@ -6,6 +6,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MyPage from "./pages/MyPage";
 import MeetingDetailPage from "./pages/MeetingDetailPage";
 import MeetingCreatePage from "./pages/MeetingCreatePage";
+import MeetingEditPage from "./pages/MeetingEditPage";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/meetings/create" element={<MeetingCreatePage />} />
         <Route path="/meetings/:id" element={<MeetingDetailPage />} />
+        <Route path="/meetings/:id/edit" element={<MeetingEditPage />} />
 
       </Routes>
     </BrowserRouter>

@@ -3,45 +3,50 @@ import Sidebar from "../components/layout/Sidebar";
 import Section from "../components/common/Section";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 
 export default function MainPage() {
   const navigate = useNavigate();
 
-  const [category, setCategory] = useState("전체");
+  // 🔥 핵심: category는 null이 기본값
+  const [category, setCategory] = useState(null);
   const [type, setType] = useState("전체"); // 전체 | 정규 | 번개
+
   const [hotMeetings, setHotMeetings] = useState([]);
   const [newMeetings, setNewMeetings] = useState([]);
 
+  // 🔥 type 바뀌면 category 조건 제거 (정규/번개 단독 필터 보장)
   useEffect(() => {
-    // 🔥 전체 + 전체일 때만 핫한 모임
-    if (category === "전체" && type === "전체") {
-      axios
-        .get("http://localhost:8080/api/meetings/hot")
-        .then((res) => setHotMeetings(res.data))
-        .catch((err) => console.error(err));
+    setCategory(null);
+  }, [type]);
+
+  useEffect(() => {
+    // 🔥 핫한 모임 (전체 + 전체일 때만)
+    if (type === "전체" && category === null) {
+      api.get("/api/meetings/hot")
+        .then(res => setHotMeetings(res.data))
+        .catch(err => console.error(err));
     } else {
       setHotMeetings([]);
     }
 
-    // ⏳ 신규 / 필터된 모임
-    axios
-      .get("http://localhost:8080/api/meetings", {
-        params: {
-          ...(category !== "전체" && { category }),
-          ...(type !== "전체" && { type }),
-        },
-      })
-      .then((res) => setNewMeetings(res.data))
-      .catch((err) => console.error(err));
-  }, [category, type]); // ✅ type 추가
+    // ⏳ 필터 모임
+    const params = {};
+
+    if (type !== "전체") params.type = type;
+    if (category !== null) params.category = category;
+
+    api.get("/api/meetings", { params })
+      .then(res => setNewMeetings(res.data))
+      .catch(err => console.error(err));
+
+  }, [type, category]);
 
   return (
     <div className="min-h-screen bg-[#f7f9fb]">
       <Header />
 
       <div className="flex">
-        {/* 🔥 type도 내려줘야 함 */}
         <Sidebar
           category={category}
           setCategory={setCategory}
@@ -64,8 +69,8 @@ export default function MainPage() {
           </div>
 
           <div className="mt-10">
-            {/* 🔥 전체 + 전체일 때만 표시 */}
-            {category === "전체" && type === "전체" && (
+            {/* 🔥 핫한 모임 */}
+            {type === "전체" && category === null && (
               <Section
                 title="🔥 지금 핫한 모임"
                 layout="grid"
@@ -73,12 +78,12 @@ export default function MainPage() {
               />
             )}
 
-            {/* ⏳ 신규 / 필터된 모임 */}
+            {/* ⏳ 필터된 모임 */}
             <Section
               title={
-                category === "전체" && type === "전체"
+                type === "전체" && category === null
                   ? "⏳ 신규 모임"
-                  : `⏳ ${category !== "전체" ? category : type} 모임`
+                  : `⏳ ${category ?? type} 모임`
               }
               layout="grid"
               groups={newMeetings}

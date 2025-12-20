@@ -1,13 +1,14 @@
 import Header from "../components/layout/Header";
 import Sidebar from "../components/layout/Sidebar";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/axios"; // axios instance
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../api/axios";
 
-export default function MeetingCreatePage() {
+export default function MeetingEditPage() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // 🔹 meetingDate를 제외한 form
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     title: "",
     category: "",
@@ -16,9 +17,34 @@ export default function MeetingCreatePage() {
     maxMembers: 2,
     imageUrl: "",
   });
-
-  // 🔹 meetingDate는 따로 관리 (팀원 방식)
   const [meetingDate, setMeetingDate] = useState("");
+
+  useEffect(() => {
+    const fetchMeeting = async () => {
+      try {
+        const res = await api.get(`/api/meetings/${id}`);
+        const data = res.data || {};
+
+        setForm({
+          title: data.title ?? "",
+          category: data.category ?? "",
+          content: data.content ?? "",
+          location: data.location ?? "",
+          maxMembers: data.maxMembers ?? 2,
+          imageUrl: data.imageUrl ?? "",
+        });
+        setMeetingDate(data.meetingDate ?? "");
+      } catch (err) {
+        console.error(err);
+        alert("데잍를 불러오는데 실패했습니다.");
+        navigate(-1);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMeeting();
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     setForm({
@@ -31,19 +57,29 @@ export default function MeetingCreatePage() {
     try {
       const submitData = {
         ...form,
-        // 🔥 핵심 로직
         meetingDate: meetingDate === "" ? null : meetingDate,
       };
 
-      await api.post("/api/meetings", submitData);
-
-      alert("모임이 등록되었습니다!");
-      navigate("/");
+      await api.put(`/api/meetings/${id}`, submitData);
+      alert("변경되었습니다.");
+      navigate(`/meetings/${id}`);
     } catch (err) {
       console.error(err);
-      alert("모임 등록 실패");
+      alert("변경 실패.");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f7f9fb]">
+        <Header />
+        <div className="flex">
+          <Sidebar />
+          <main className="flex-1 p-10">Loading...</main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f7f9fb]">
@@ -53,49 +89,45 @@ export default function MeetingCreatePage() {
         <Sidebar />
 
         <main className="flex-1 px-14 py-10">
-          <h1 className="text-2xl font-bold mb-8">모임 등록</h1>
+          <h1 className="text-2xl font-bold mb-8">Edit Meeting</h1>
 
           <div className="bg-white rounded-2xl shadow p-8 max-w-2xl">
-            {/* 제목 */}
             <div className="mb-5">
-              <label className="block mb-1 font-semibold">모임 이름</label>
+              <label className="block mb-1 font-semibold">Title</label>
               <input
                 name="title"
                 value={form.title}
                 onChange={handleChange}
                 className="w-full border rounded-lg p-3"
-                placeholder="모임 이름 입력"
+                placeholder="Meeting title"
               />
             </div>
 
-            {/* 카테고리 */}
             <div className="mb-5">
-              <label className="block mb-1 font-semibold">카테고리</label>
+              <label className="block mb-1 font-semibold">Category</label>
               <input
                 name="category"
                 value={form.category}
                 onChange={handleChange}
                 className="w-full border rounded-lg p-3"
-                placeholder="스터디 / 운동 / 취미"
+                placeholder="Sport / Study / Hobby"
               />
             </div>
 
-            {/* 소개 */}
             <div className="mb-5">
-              <label className="block mb-1 font-semibold">모임 소개</label>
+              <label className="block mb-1 font-semibold">Content</label>
               <textarea
                 name="content"
                 value={form.content}
                 onChange={handleChange}
                 rows={4}
                 className="w-full border rounded-lg p-3"
-                placeholder="모임에 대한 설명을 입력하세요"
+                placeholder="Describe the meeting"
               />
             </div>
 
-            {/* 장소 */}
             <div className="mb-5">
-              <label className="block mb-1 font-semibold">장소</label>
+              <label className="block mb-1 font-semibold">Location</label>
               <input
                 name="location"
                 value={form.location}
@@ -104,9 +136,8 @@ export default function MeetingCreatePage() {
               />
             </div>
 
-            {/* 모임 날짜 (datetime-local) */}
             <div className="mb-5">
-              <label className="block mb-1 font-semibold">모임 날짜</label>
+              <label className="block mb-1 font-semibold">Meeting Date</label>
               <input
                 type="datetime-local"
                 value={meetingDate}
@@ -115,9 +146,8 @@ export default function MeetingCreatePage() {
               />
             </div>
 
-            {/* 인원 */}
             <div className="mb-5">
-              <label className="block mb-1 font-semibold">최대 인원</label>
+              <label className="block mb-1 font-semibold">Max Members</label>
               <input
                 type="number"
                 name="maxMembers"
@@ -128,26 +158,22 @@ export default function MeetingCreatePage() {
               />
             </div>
 
-            {/* 이미지 */}
             <div className="mb-8">
-              <label className="block mb-1 font-semibold">
-                대표 이미지 URL
-              </label>
+              <label className="block mb-1 font-semibold">Image URL</label>
               <input
                 name="imageUrl"
                 value={form.imageUrl}
                 onChange={handleChange}
                 className="w-full border rounded-lg p-3"
-                placeholder="이미지 URL 입력"
+                placeholder="Image URL"
               />
             </div>
 
-            {/* 버튼 */}
             <button
               onClick={handleSubmit}
               className="w-full py-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition"
             >
-              모임 등록하기
+              Save Changes
             </button>
           </div>
         </main>
