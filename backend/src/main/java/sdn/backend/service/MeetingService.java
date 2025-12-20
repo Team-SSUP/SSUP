@@ -104,6 +104,7 @@ public class MeetingService {
         meeting.update(
             dto.getTitle(),
             dto.getCategory(),
+            dto.getContent(),
             dto.getLocation(),
             dto.getMeetingDate(),
             dto.getMaxMembers(),

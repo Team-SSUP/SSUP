@@ -71,13 +71,14 @@ public class Meeting {
     }
 
     // 모임 수정
-    public void update(String title, String category, String location, String meetingDate, Integer maxMembers, String imageUrl) {
-    this.title = title;
-    this.category = category;
-    this.location = location;
-    this.meetingDate = meetingDate;
-    this.maxMembers = maxMembers;
-    this.imageUrl = imageUrl;
+    public void update(String title, String category, String content, String location, String meetingDate, Integer maxMembers, String imageUrl) {
+        this.title = title;
+        this.category = category;
+        this.content = content;
+        this.location = location;
+        this.meetingDate = meetingDate;
+        this.maxMembers = maxMembers;
+        this.imageUrl = imageUrl;
     }
 
     // 생성자
