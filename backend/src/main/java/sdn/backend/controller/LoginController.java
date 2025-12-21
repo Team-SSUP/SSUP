@@ -27,12 +27,12 @@ public class LoginController {
 
     // 2. 로그인 API
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody LoginDto loginDto) {
+    public Map<String, String> login(@RequestBody LoginDto loginDto) {
         String token = userService.login(loginDto);
         // 로그인한 유저의 정보를 가져옵니다.
         User user = userService.getUserByEmail(loginDto.getEmail());
 
-        Map<String, Object> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>();
         response.put("token", token);
         response.put("email", user.getEmail());
         response.put("nickname", user.getNickname()); // 프론트의 res.data.nickname과 매칭
@@ -41,7 +41,12 @@ public class LoginController {
 
     @GetMapping("/me")
     public Map<String, String> getMe(Principal principal) {
-        // Principal에서 현재 로그인된 유저의 이메일을 가져와 정보를 조회합니다.
+        // 1. Principal이 null인지 먼저 체크합니다.
+        if (principal == null) {
+            throw new RuntimeException("인증 정보가 없습니다.");
+        }
+
+        // 2. Principal.getName()을 통해 이메일을 가져옵니다.
         User user = userService.getUserByEmail(principal.getName());
         
         Map<String, String> response = new HashMap<>();
