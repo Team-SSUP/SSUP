@@ -1,8 +1,10 @@
 package sdn.backend.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import sdn.backend.dto.UserProfileUpdateDto;
+import sdn.backend.entity.User;
 import sdn.backend.service.UserService;
 
 @RestController
@@ -26,4 +29,6 @@ public class UserController {
         userService.updateProfile(principal.getName(), updateDto);
         return "프로필 정보가 성공적으로 수정되었습니다.";
     }
+
+    
 }

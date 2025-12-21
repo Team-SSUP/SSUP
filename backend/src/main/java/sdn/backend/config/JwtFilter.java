@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // 2. 토큰 꺼내기
-        String token = authorization.split(" ")[1];
+        String token = authorization.substring(7);
 
         // 3. 토큰이 유효하고, 만료되지 않았는지 확인
         if (jwtUtil.validateToken(token)) {
