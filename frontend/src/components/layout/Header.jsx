@@ -1,14 +1,52 @@
 //Header.jsx
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../api/axios";
 
 export default function Header() {
-  const isLoggedIn = !!localStorage.getItem("token");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
-  const handleLogout = () =>{
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setIsLoggedIn(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    api
+      .get("/api/me")
+      .then(() => {
+        if (!cancelled) {
+          setIsLoggedIn(true);
+        }
+      })
+      .catch((err) => {
+        const status = err?.response?.status;
+        if (status === 401 || status === 403) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("email");
+          localStorage.removeItem("name");
+          if (!cancelled) {
+            setIsLoggedIn(false);
+          }
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
+    setIsLoggedIn(false);
     navigate("/");
-  }
+  };
   return (
     <header className="w-full h-20 bg-white flex items-center justify-between px-12 border-b border-gray-200">
 
@@ -23,7 +61,6 @@ export default function Header() {
         className="w-[400px] px-5 py-2.5 rounded-full border focus:ring-2 focus:ring-blue-400"
         placeholder="원하는 모임을 검색하세요"
       />
-
   
       <div className="flex gap-4">
         {isLoggedIn ? (
@@ -45,7 +82,7 @@ export default function Header() {
             </button>
           </>
         ) : (
-          // ❌ 비로그인 상태
+          //비로그인 상태
           <>
             <Link
               to="/login"
