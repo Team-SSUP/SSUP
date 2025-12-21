@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class SignupDto { 
-    private String email;
+public class UserProfileUpdateDto {
     private String nickname;
-    private String password;
+    private String password; // 새 비밀번호 (변경 시에만 입력)
 }

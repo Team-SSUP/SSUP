@@ -26,13 +26,13 @@ public class Meeting {
     private String category;    // 카테고리 (운동, 스터디 등)
 
     @Column(nullable = false)
-    private String content;     //모임소개
+    private String content;     //모임 소개글
 
     @Column(nullable = false)
-    private String location;    // 장소 (정왕동 체육관)
+    private String location;    // 장소
 
     @Column(nullable = true)
-    private String meetingDate; // 모임 시간 (문자열로 간편하게 처리: "오늘 19:00")
+    private LocalDateTime meetingDate; // 모임 시간
 
     @Column(nullable = false)
     private Integer currentMembers; // 현재 인원
@@ -71,18 +71,18 @@ public class Meeting {
     }
 
     // 모임 수정
-    public void update(String title, String category, String content, String location, String meetingDate, Integer maxMembers, String imageUrl) {
-        this.title = title;
-        this.category = category;
-        this.content = content;
-        this.location = location;
-        this.meetingDate = meetingDate;
-        this.maxMembers = maxMembers;
-        this.imageUrl = imageUrl;
+    public void update(String title, String category, String content, String location, LocalDateTime meetingDate, Integer maxMembers, String imageUrl) {
+    this.title = title;
+    this.category = category;
+    this.content=content;
+    this.location = location;
+    this.meetingDate = meetingDate;
+    this.maxMembers = maxMembers;
+    this.imageUrl = imageUrl;
     }
 
     // 생성자
-    public Meeting(String title, String category, String content, String location, String meetingDate, Integer maxMembers, String imageUrl) {
+    public Meeting(String title, String category, String content, String location, LocalDateTime meetingDate, Integer maxMembers, String imageUrl) {
         this.title = title;
         this.category = category;
         this.content=content;

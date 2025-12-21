@@ -3,6 +3,7 @@ package sdn.backend.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sdn.backend.dto.LoginDto;
+import sdn.backend.dto.SignupDto;
 import sdn.backend.service.UserService;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class LoginController {
 
     // 1. 회원가입 API
     @PostMapping("/signup")
-    public String signup(@RequestBody LoginDto signupDto) {
+    public String signup(@RequestBody SignupDto signupDto) {
         userService.signup(signupDto);
         return "회원가입 성공!"; // 간단한 문자열 반환
     }
