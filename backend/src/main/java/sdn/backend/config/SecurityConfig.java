@@ -51,7 +51,7 @@ public class SecurityConfig {
             // URL별 권한 설정
             .authorizeHttpRequests(auth -> auth
                 // 로그인, 회원가입은 누구나 접속 가능
-                .requestMatchers("/api/login", "/api/signup").permitAll()
+                .requestMatchers("/api/login", "/api/signup", "/error").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/meetings/**").permitAll() 
                 // 그 외 모든 요청은 인증 필요
                 .anyRequest().authenticated()
