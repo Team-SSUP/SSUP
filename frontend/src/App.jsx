@@ -20,6 +20,7 @@ export default function App() {
         <Route path="/meetings/create" element={<MeetingCreatePage />} />
         <Route path="/meetings/:id" element={<MeetingDetailPage />} />
         <Route path="/meetings/:id/edit" element={<MeetingEditPage />} />
+        <Route path="/search" element={<SearchPage />} />
 
       </Routes>
     </BrowserRouter>
