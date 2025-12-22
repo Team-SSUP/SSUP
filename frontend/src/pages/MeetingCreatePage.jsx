@@ -35,7 +35,7 @@ export default function MeetingCreatePage() {
         meetingDate: meetingDate === "" ? null : meetingDate,
       };
 
-      await api.post("/api/meetings", submitData);
+      await api.post("/meetings", submitData);
 
       alert("모임이 등록되었습니다!");
       navigate("/");

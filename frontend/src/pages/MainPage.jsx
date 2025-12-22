@@ -23,7 +23,7 @@ export default function MainPage() {
   useEffect(() => {
     // 🔥 핫한 모임 (전체 + 전체일 때만)
     if (type === "전체" && category === null) {
-      api.get("/api/meetings/hot")
+      api.get("/meetings/hot")
         .then(res => setHotMeetings(res.data))
         .catch(err => console.error(err));
     } else {
@@ -36,7 +36,7 @@ export default function MainPage() {
     if (type !== "전체") params.type = type;
     if (category !== null) params.category = category;
 
-    api.get("/api/meetings", { params })
+    api.get("/meetings", { params })
       .then(res => setNewMeetings(res.data))
       .catch(err => console.error(err));
 

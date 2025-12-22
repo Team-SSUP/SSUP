@@ -14,8 +14,8 @@ export default function MyPage() {
       try {
         // 두 API를 동시에 호출
         const [joinedRes, createdRes] = await Promise.all([
-          api.get("/api/meetings/my/joined"),
-          api.get("/api/meetings/my/created"),
+          api.get("/meetings/my/joined"),
+          api.get("/meetings/my/created"),
         ]);
 
         setJoinedMeetings(joinedRes.data || []);

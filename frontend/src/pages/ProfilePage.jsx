@@ -16,7 +16,7 @@ export default function ProfilePage() {
     }
 
     try {
-      await api.put("/api/profile/update", {
+      await api.put("/profile/update", {
         nickname: nickname || null,
         password: password || null,
       });

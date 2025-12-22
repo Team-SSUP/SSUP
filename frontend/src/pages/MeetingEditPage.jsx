@@ -22,7 +22,7 @@ export default function MeetingEditPage() {
   useEffect(() => {
     const fetchMeeting = async () => {
       try {
-        const res = await api.get(`/api/meetings/${id}`);
+        const res = await api.get(`/meetings/${id}`);
         const data = res.data || {};
 
         setForm({
@@ -60,7 +60,7 @@ export default function MeetingEditPage() {
         meetingDate: meetingDate === "" ? null : meetingDate,
       };
 
-      await api.put(`/api/meetings/${id}`, submitData);
+      await api.put(`/meetings/${id}`, submitData);
       alert("변경되었습니다.");
       navigate(`/meetings/${id}`);
     } catch (err) {
