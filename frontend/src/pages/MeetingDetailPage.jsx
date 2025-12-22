@@ -39,7 +39,7 @@ export default function MeetingDetailPage() {
   // 상세 조회 
   const fetchMeeting = async () => {
     try {
-      const res = await api.get(`/api/meetings/${id}`);
+      const res = await api.get(`meetings/${id}`);
       setGroup(res.data);
     } catch (err) {
       console.error(err);
@@ -102,7 +102,7 @@ export default function MeetingDetailPage() {
     if (!window.confirm("이 모임에 참가하시겠습니까?")) return;
 
     try {
-      await api.post(`/api/meetings/${id}/join`);
+      await api.post(`meetings/${id}/join`);
       alert("참가 신청이 완료되었습니다!");
       fetchMeeting(); // 데이터 새로고침 (인원수/명단 갱신)
     } catch (error) {
@@ -117,7 +117,7 @@ export default function MeetingDetailPage() {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
     try {
-      await api.delete(`/api/meetings/${id}`);
+      await api.delete(`meetings/${id}`);
       alert("모임이 삭제되었습니다.");
       navigate("/");
     } catch (err) {

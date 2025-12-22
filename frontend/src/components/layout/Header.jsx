@@ -14,7 +14,7 @@ export default function Header() {
     const token = localStorage.getItem("token");
     
     if (token) {
-      api.get("/api/me")
+      api.get("me")
         .then(() => {
           // 3. 서버 응답이 성공(200 OK)하면 로그인 상태로 변경합니다.
           setIsLoggedIn(true);

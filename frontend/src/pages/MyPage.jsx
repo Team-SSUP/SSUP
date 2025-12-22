@@ -14,8 +14,8 @@ export default function MyPage() {
       try {
         // 두 API를 동시에 호출
         const [joinedRes, createdRes] = await Promise.all([
-          api.get("/api/meetings/my/joined"),
-          api.get("/api/meetings/my/created"),
+          api.get("meetings/my/joined"),
+          api.get("meetings/my/created"),
         ]);
 
         setJoinedMeetings(joinedRes.data || []);
@@ -53,7 +53,7 @@ export default function MyPage() {
         {meetings.map((m) => (
           <div
             key={m.id}
-            onClick={() => navigate(`/meetings/${m.id}`)}
+            onClick={() => navigate(`meetings/${m.id}`)}
             className="h-32 bg-gray-200 rounded-xl p-4 cursor-pointer hover:bg-gray-300 transition"
           >
             <h4 className="font-semibold truncate">{m.title}</h4>
@@ -71,7 +71,7 @@ export default function MyPage() {
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-2xl font-bold">마이 페이지</h2>
           <button
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate("profile")}
             className="px-5 py-2 bg-gray-100 rounded-lg font-semibold hover:bg-gray-200"
           >
             프로필 변경
