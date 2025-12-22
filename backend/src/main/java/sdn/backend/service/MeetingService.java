@@ -166,4 +166,14 @@ public class MeetingService {
                 .map(MeetingResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    // [추가] 검색 기능
+    public List<MeetingResponseDto> searchMeetings(String keyword) {
+        // 제목이나 내용에 키워드가 있는 모임을 찾습니다.
+        List<Meeting> meetings = meetingRepository.findByTitleContainingOrContentContaining(keyword, keyword);
+
+        return meetings.stream()
+                .map(MeetingResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }

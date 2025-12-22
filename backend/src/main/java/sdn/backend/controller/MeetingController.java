@@ -91,4 +91,10 @@ public class MeetingController {
         meetingService.joinMeeting(id, principal.getName());
         return "참가 성공";
     }
+
+    // 검색 API
+    @GetMapping("/search")
+    public List<MeetingResponseDto> searchMeetings(@RequestParam String keyword) {
+        return meetingService.searchMeetings(keyword);
+    }
 }

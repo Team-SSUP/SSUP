@@ -13,6 +13,9 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     // 핫한 모임 조회 (현재 인원이 많은 순서대로 8개)
     List<Meeting> findTop8ByOrderByCurrentMembersDesc();
+    
+    // 검색용 메서드 (제목 또는 내용에 keyword가 포함된 경우)
+    List<Meeting> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
 
     // 카테고리별 필터링
     List<Meeting> findByCategory(String category);
