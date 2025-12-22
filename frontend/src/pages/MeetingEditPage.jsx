@@ -159,7 +159,7 @@ export default function MeetingEditPage() {
             </div>
 
             <div className="mb-8">
-              <label className="block mb-1 font-semibold">Image URL</label>
+              <label className="block mb-1 font-semibold">Image URL (없을경우 지도가 대표이미지로 등록됩니다.)</label>
               <input
                 name="imageUrl"
                 value={form.imageUrl}

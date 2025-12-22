@@ -131,7 +131,7 @@ export default function MeetingCreatePage() {
             {/* 이미지 */}
             <div className="mb-8">
               <label className="block mb-1 font-semibold">
-                대표 이미지 URL
+                대표 이미지 URL (없을경우 지도가 대표이미지로 등록됩니다.)
               </label>
               <input
                 name="imageUrl"
