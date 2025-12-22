@@ -1,46 +1,60 @@
-// Sidebar.jsx
-export default function Sidebar() {
+export default function Sidebar({
+  category,
+  setCategory,
+  type,
+  setType,
+}) {
   return (
-    <aside className="w-[180px] h-full border-r bg-white px-5 py-6 flex flex-col gap-6 flex-shrink-0">
+    <aside className="w-[180px] h-full border-r bg-white px-5 py-6 flex flex-col gap-6">
 
-      {/* 상단 메뉴 제목 */}
       <div className="text-lg font-bold text-gray-800">
         메뉴
       </div>
 
-      {/* 정기모임 / 번개모임 */}
+      {/* 정규 / 번개 */}
       <nav className="flex flex-col gap-3">
-        <button className="text-left px-3 py-2 rounded-md hover:bg-blue-100 hover:text-blue-700 transition">
-          정기모임
-        </button>
-
-        <button className="text-left px-3 py-2 rounded-md hover:bg-blue-100 hover:text-blue-700 transition">
-          번개모임
-        </button>
+        {["전체", "정규", "번개"].map(t => (
+          <button
+            key={t}
+            onClick={() => {
+              setType(t);
+              // 🔥 핵심: 타입 바꿀 때 카테고리 초기화
+              setCategory("전체");
+            }}
+            className={`text-left px-3 py-2 rounded-md transition
+              ${
+                type === t
+                  ? "bg-blue-100 text-blue-700 font-semibold"
+                  : "hover:bg-gray-100"
+              }`}
+          >
+            {t === "전체" ? "전체 모임" : `${t}모임`}
+          </button>
+        ))}
       </nav>
 
-      <hr className="border-gray-300" />
+      <hr />
 
       {/* 카테고리 */}
-      <div>
-        <div className="text-sm font-semibold text-gray-600 ml-10">카테고리</div>
-
-        <div className="flex flex-col gap-2">
-          <button className="text-left px-3 py-2 rounded-md hover:bg-gray-100 transition">
-            운동
+      <div className="flex flex-col gap-2">
+        {["전체", "운동", "스터디", "독서", "게임"].map(c => (
+          <button
+            key={c}
+            onClick={() => {
+              setCategory(c);
+              // 🔥 카테고리 바꿀 때 타입은 그대로 둠
+            }}
+            className={`text-left px-3 py-2 rounded-md transition
+              ${
+                category === c
+                  ? "bg-blue-100 text-blue-700 font-semibold"
+                  : "hover:bg-gray-100"
+              }`}
+          >
+            {c}
           </button>
-          <button className="text-left px-3 py-2 rounded-md hover:bg-gray-100 transition">
-            스터디
-          </button>
-          <button className="text-left px-3 py-2 rounded-md hover:bg-gray-100 transition">
-            독서
-          </button>
-          <button className="text-left px-3 py-2 rounded-md hover:bg-gray-100 transition">
-            게임
-          </button>
-        </div>
+        ))}
       </div>
-
     </aside>
   );
 }
