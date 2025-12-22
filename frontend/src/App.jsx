@@ -7,6 +7,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MeetingDetailPage from "./pages/MeetingDetailPage";
 import MeetingCreatePage from "./pages/MeetingCreatePage";
 import MeetingEditPage from "./pages/MeetingEditPage";
+import SearchPage from "./pages/SearchPage";
 
 export default function App() {
   return (

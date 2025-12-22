@@ -5,59 +5,45 @@ import api from "../../api/axios";
 
 export default function Header() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
-
-  // [추가] 검색어 상태 관리
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
+    // 2. 토큰이 있을 때만 서버에 확인 요청을 보냅니다.
     const token = localStorage.getItem("token");
-    if (!token) {
-      setIsLoggedIn(false);
-      return;
-    }
-
-    let cancelled = false;
-
-    api
-      .get("/api/me")
-      .then(() => {
-        if (!cancelled) {
+    
+    if (token) {
+      api.get("/api/me")
+        .then(() => {
+          // 3. 서버 응답이 성공(200 OK)하면 로그인 상태로 변경합니다.
           setIsLoggedIn(true);
-        }
-      })
-      .catch((err) => {
-        const status = err?.response?.status;
-        if (status === 401 || status === 403) {
+        })
+        .catch(() => {
+          // 4. 실패(토큰 만료, 서버 재시작 등)하면 토큰을 지우고 로그아웃 상태를 유지합니다.
           localStorage.removeItem("token");
           localStorage.removeItem("email");
-          localStorage.removeItem("name");
-          if (!cancelled) {
-            setIsLoggedIn(false);
-          }
-        }
-      });
+          localStorage.removeItem("nickname");
+          setIsLoggedIn(false);
+        });
+    }
+  }, []); // 페이지 로드 시 한 번만 실행
 
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const handleLogout = () => {
+    localStorage.clear(); // 모든 정보 삭제
+    setIsLoggedIn(false);
+    alert("로그아웃 되었습니다.");
+    navigate("/");
+  };
 
-  // [추가] 엔터키 눌렀을 때 검색 실행
+  // 엔터키 눌렀을 때 검색 실행
   const handleSearch = (e) => {
     if (e.key === "Enter" && keyword.trim()) {
-      // 검색 결과 페이지로 이동 (검색어 쿼리 파라미터로 전달)
       navigate(`/search?keyword=${keyword}`);
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("name");
-    setIsLoggedIn(false);
-    navigate("/");
-  };
+  
   return (
     <header className="w-full h-20 bg-white flex items-center justify-between px-12 border-b border-gray-200">
 
@@ -67,7 +53,7 @@ export default function Header() {
         시흥시 놀이터
       </div>
       
-      {/* [수정] 검색창 */}
+      {/* 검색창 */}
       <input 
         type="text" 
         className="w-[400px] px-5 py-2.5 rounded-full border focus:ring-2 focus:ring-blue-400"
