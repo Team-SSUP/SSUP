@@ -3,19 +3,19 @@ import Sidebar from "../components/layout/Sidebar";
 import { useParams, useNavigate } from "react-router-dom";
 import { MapPin, Clock, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import api from "../api/axios"; // ⭐ axios instance 사용
+import api from "../api/axios";
 
 export default function MeetingDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [group, setGroup] = useState(null);
 
-  // 임시 멤버 데이터
+  // 임시 멤버 데이터 (나중에 백엔드 연동 필요)
   const members = [
     { id: 1, name: "정찬우", imageUrl: "https://picsum.photos/100?1" },
   ];
 
-  // ✅ 상세 조회
+  //  상세 조회
   useEffect(() => {
     api
       .get(`/api/meetings/${id}`)
@@ -23,7 +23,38 @@ export default function MeetingDetailPage() {
       .catch((err) => console.error(err));
   }, [id]);
 
-  // ✅ 삭제
+  // 카카오 지도 렌더링
+  useEffect(() => {
+    // group 데이터가 없거나, window.kakao 객체가 없으면 실행하지 않음
+    if (!group || !window.kakao) return;
+
+    const container = document.getElementById("map"); // 지도를 담을 div
+    const options = {
+      center: new window.kakao.maps.LatLng(33.450701, 126.570667), // 기본 좌표
+      level: 3, // 확대 레벨
+    };
+
+    const map = new window.kakao.maps.Map(container, options);
+    const geocoder = new window.kakao.maps.services.Geocoder();
+
+    // 주소로 좌표를 검색합니다
+    geocoder.addressSearch(group.location, function (result, status) {
+      if (status === window.kakao.maps.services.Status.OK) {
+        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+
+        // 결과값으로 받은 위치를 마커로 표시합니다
+        const marker = new window.kakao.maps.Marker({
+          map: map,
+          position: coords,
+        });
+
+        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+        map.setCenter(coords);
+      }
+    });
+  }, [group]); // group 정보가 로딩되면 실행
+
+  //  삭제
   const handleDelete = async () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
@@ -91,7 +122,9 @@ export default function MeetingDetailPage() {
               <div className="flex items-center gap-2">
                 <Clock size={16} />
                 <span>
-                  {group.meetingDate ? group.meetingDate : "정규 모임"}
+                  {group.meetingDate
+                    ? new Date(group.meetingDate).toLocaleString()
+                    : "정규 모임"}
                 </span>
               </div>
 
@@ -109,14 +142,23 @@ export default function MeetingDetailPage() {
             </div>
 
             {/* 모임 소개 */}
-            <div>
+            <div className="mb-8">
               <h2 className="text-lg font-semibold mb-2">모임 소개</h2>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {group.content}
               </p>
             </div>
 
-            {/* 수정 / 삭제 */}
+            {/*  지도 표시 영역 */}
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold mb-2">오시는 길</h2>
+              <div
+                id="map"
+                className="w-full h-[350px] rounded-lg border border-gray-200"
+              ></div>
+            </div>
+
+            {/* 삭제 버튼 (개설자일 때만 보이도록 조건 처리 권장) */}
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => navigate(`/meetings/${id}/edit`)}
