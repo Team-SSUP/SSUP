@@ -14,7 +14,7 @@ export default function SearchPage() {
     const fetchSearchResults = async () => {
       try {
         // 백엔드 검색 API 호출
-        const response = await api.get(`/meetings/search?keyword=${keyword}`);
+        const response = await api.get(`meetings/search?keyword=${keyword}`);
         setMeetings(response.data);
       } catch (error) {
         console.error("검색 실패", error);

@@ -21,7 +21,7 @@ export default function SignUpPage() {
     }
 
     try {
-      await api.post("/signup", {
+      await api.post("signup", {
         email: email,          // SignupDto.email
         nickname: nickname,    // SignupDto.nickname
         password: password,    // SignupDto.password
