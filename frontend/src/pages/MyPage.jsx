@@ -14,8 +14,8 @@ export default function MyPage() {
       try {
         // 두 API를 동시에 호출
         const [joinedRes, createdRes] = await Promise.all([
-          api.get("/meetings/my/joined"),
-          api.get("/meetings/my/created"),
+          api.get("/api/meetings/my/joined"),
+          api.get("/api/meetings/my/created"),
         ]);
 
         setJoinedMeetings(joinedRes.data || []);
@@ -53,7 +53,7 @@ export default function MyPage() {
         {meetings.map((m) => (
           <div
             key={m.id}
-            onClick={() => navigate(`/meeting/${m.id}`)}
+            onClick={() => navigate(`/meetings/${m.id}`)}
             className="h-32 bg-gray-200 rounded-xl p-4 cursor-pointer hover:bg-gray-300 transition"
           >
             <h4 className="font-semibold truncate">{m.title}</h4>

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,6 +22,7 @@ export default function ProfilePage() {
       });
 
       alert("프로필이 수정되었습니다.");
+      navigate("/");
       setPassword("");
     } catch (error) {
       console.error(error);

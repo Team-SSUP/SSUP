@@ -7,6 +7,9 @@ export default function Header() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
+  // [추가] 검색어 상태 관리
+  const [keyword, setKeyword] = useState("");
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -40,6 +43,14 @@ export default function Header() {
     };
   }, []);
 
+  // [추가] 엔터키 눌렀을 때 검색 실행
+  const handleSearch = (e) => {
+    if (e.key === "Enter" && keyword.trim()) {
+      // 검색 결과 페이지로 이동 (검색어 쿼리 파라미터로 전달)
+      navigate(`/search?keyword=${keyword}`);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
@@ -56,10 +67,14 @@ export default function Header() {
         시흥시 놀이터
       </div>
       
+      {/* [수정] 검색창 */}
       <input 
         type="text" 
         className="w-[400px] px-5 py-2.5 rounded-full border focus:ring-2 focus:ring-blue-400"
         placeholder="원하는 모임을 검색하세요"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        onKeyDown={handleSearch}
       />
   
       <div className="flex gap-4">
