@@ -37,22 +37,26 @@ export default function MeetingDetailPage() {
     const map = new window.kakao.maps.Map(container, options);
     const geocoder = new window.kakao.maps.services.Geocoder();
 
-    // 주소로 좌표를 검색합니다
+    console.log("검색할 주소:", group.location);
+
     geocoder.addressSearch(group.location, function (result, status) {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+        // 검색 결과를 콘솔에 출력
+        console.log("검색 상태:", status);
+        console.log("검색 결과:", result);
 
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        const marker = new window.kakao.maps.Marker({
-          map: map,
-          position: coords,
-        });
-
-        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-        map.setCenter(coords);
-      }
-    });
-  }, [group]); // group 정보가 로딩되면 실행
+        if (status === window.kakao.maps.services.Status.OK) {
+          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+          const marker = new window.kakao.maps.Marker({
+            map: map,
+            position: coords,
+          });
+          map.setCenter(coords);
+        } else {
+          // 실패 시 알림
+          console.error("주소 검색 실패! 주소를 확인해주세요.");
+        }
+      });
+    }, [group]);
 
   //  삭제
   const handleDelete = async () => {
@@ -97,12 +101,16 @@ export default function MeetingDetailPage() {
           </button>
 
           {/* 대표 이미지 */}
-          <div className="w-full h-[500px] rounded-2xl overflow-hidden mb-10">
-            <img
-              src={group.imageUrl}
-              alt={group.title}
-              className="w-full h-full object-contain"
-            />
+          <div className="w-full h-[500px] rounded-2xl overflow-hidden mb-10 bg-gray-100 flex items-center justify-center">
+            {group.imageUrl ? (
+              <img
+                src={group.imageUrl}
+                alt={group.title}
+                className="w-full h-full object-contain"
+              />
+            ) : (
+              <span className="text-gray-400">이미지가 없습니다</span>
+            )}
           </div>
 
           {/* 상세 카드 */}

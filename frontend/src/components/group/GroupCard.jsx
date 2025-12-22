@@ -10,12 +10,18 @@ export default function GroupCard({ group }) {
       
       
       {/* 이미지 */}
-      <div className="relative">
-        <img
-          src={group.imageUrl}
-          alt={group.title}
-          className="w-full h-44 object-cover"
-        />
+      <div className="relative w-full h-44 bg-gray-200">
+        {group.imageUrl ? (
+          <img
+            src={group.imageUrl}
+            alt={group.title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+            이미지 없음
+          </div>
+        )}
         {/* 카테고리 배지 */}
         <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
           {group.category}
