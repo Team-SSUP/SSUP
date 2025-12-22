@@ -68,7 +68,11 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         
         // 프론트엔드 주소 허용 (localhost:3000, localhost:5173 등)
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", 
+                                                "http://localhost:5173",
+                                                "http://13.209.43.100",
+                                                "http://13.209.43.100:5173"
+                                                ));
         
         // 허용할 HTTP 메서드
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
